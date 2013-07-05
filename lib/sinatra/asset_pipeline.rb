@@ -23,6 +23,7 @@ module Sinatra
         Sprockets::Helpers.configure do |config|
           config.environment = app.sprockets
           config.digest = app.assets_digest
+          config.prefix = app.assets_prefix
         end
       end
 
@@ -45,7 +46,7 @@ module Sinatra
       app.helpers Sprockets::Helpers
 
       app.configure :test, :development do
-        app.get '/assets/*' do |key|
+        app.get "/#{app.assets_prefix}/*" do |key|
           key.gsub! /(-\w+)(?!.*-\w+)/, ""
           asset = app.sprockets[key]
           content_type asset.content_type
